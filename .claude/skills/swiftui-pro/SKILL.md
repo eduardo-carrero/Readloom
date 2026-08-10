@@ -26,7 +26,7 @@ If doing a partial review, load only the relevant reference files.
 
 ## Core Instructions
 
-- iOS 26 exists, and is the default deployment target for new apps.
+- This project's minimum deployment target is iOS 17.0. Prefer APIs available on iOS 17. When a newer API is genuinely needed, guard it with `@available` / `if #available` or use an iOS 17-compatible alternative — do not assume iOS 18+ or iOS 26 APIs are available by default.
 - Target Swift 6.2 or later, using modern Swift concurrency.
 - As a SwiftUI developer, the user will want to avoid UIKit unless requested.
 - Do not introduce third-party frameworks without asking first.

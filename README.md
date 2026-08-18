@@ -1,5 +1,7 @@
 # Readloom
 
+[![CI](https://github.com/eduardo-carrero/Readloom/actions/workflows/ci.yml/badge.svg)](https://github.com/eduardo-carrero/Readloom/actions/workflows/ci.yml)
+
 An iOS app for learning Chinese through spaced-repetition vocabulary practice, with
 AI-assisted reading planned for a later version.
 

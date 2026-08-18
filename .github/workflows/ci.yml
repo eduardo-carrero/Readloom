@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Build & Test (iOS)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Use the newest stable Xcode available on the runner image.
+      # Pin to a specific version here later if reproducibility becomes important.
+      - name: Select Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Show tool versions
+        run: |
+          xcodebuild -version
+          swift --version
+
+      - name: Build and run unit tests
+        run: |
+          set -o pipefail
+          # Pick the highest-numbered available iPhone simulator on the runner.
+          DEVICE=$(xcrun simctl list devices available \
+            | grep -Eo 'iPhone [0-9]+( Pro( Max)?)?' | sort -Vu | tail -1)
+          echo "Using simulator: $DEVICE"
+          xcodebuild test \
+            -project Readloom.xcodeproj \
+            -scheme Readloom \
+            -only-testing:ReadloomTests \
+            -destination "platform=iOS Simulator,name=$DEVICE" \
+            -skipMacroValidation \
+            CODE_SIGNING_ALLOWED=NO
